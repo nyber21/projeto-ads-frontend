@@ -23,11 +23,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td colspan="4" class="text-center text-secondary py-4">
-                                    TODO: listar categorias com @ for
-                                </td>
-                            </tr>
+                            @for (categoria of categorias; track categoria.id){
+                                <tr>
+                                    <td>{{categoria.descricao}}</td>
+                                    <td> {{categoria.tipo==='RECEITA' ? 'Receita':'Despesa'}} </td>
+                                    <td> {{categoria.ativo ? 'Ativa': 'Inativa'}} </td>
+                                    <td>
+                                        <button type="Button" class="btn btn-sm btn-outline-primary me-2" (click)="editar(categoria)">
+                                            Editar  
+                                        </button>
+                                        <button type="Button" class="btn btn-sm btn-outline-primary me-2" (click)="alterarSituacao(categoria.id)">
+                                            {{categoria.ativo ? 'Inativar': 'Ativar'}}
+                                        </button>
+                                    </td>
+                                </tr>   
+                            } @empty {
+                                <tr>
+                                    <td colspan="4" class="text-center text-secondary py-4">
+                                        Nenhuma Categoria Cadastrada.
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
