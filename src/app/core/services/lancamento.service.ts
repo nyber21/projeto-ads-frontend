@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
-  Categoria,
-  CategoriaInput
-} from '../../models/categoria.model';
+  Lancamento,
+  LancamentoInput
+} from '../../models/lancamento.model';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
 export class LancamentoService {
   private readonly API = `${environment.apiUrl}/lancamentos`;
 
-  constructor(private http:Http)Lancamento
+  constructor(private http:HttpClient){}
 
   listar(): Observable<Lancamento[]>{
     return this.http.get<Lancamento[]>(this.API);
