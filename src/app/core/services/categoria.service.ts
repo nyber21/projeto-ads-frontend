@@ -3,66 +3,31 @@ import {
   Categoria,
   CategoriaInput
 } from '../../models/categoria.model';
+import { environment } from '../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoriaService {
+  private readonly API = `${environment.apiUrl}/categorias`;
 
-  private categorias: Categoria[] = [
-    { id: 1, descricao: 'Salário', tipo: 'RECEITA', ativo: true },
-    { id: 2, descricao: 'Alimentação', tipo: 'DESPESA', ativo: true },
-    { id: 3, descricao: 'Moradia', tipo: 'DESPESA', ativo: true }
-  ];
+  constructor(private http:HttpClient){}
 
-  private proximoId = 4;
-
-  listar(): Categoria[] {
-    return [...this.categorias];
+  listar(): Observable<Categoria[]>{
+    return this.http.get<Categoria[]>(this.API);
   }
 
-  buscarPorId(id: number): Categoria | undefined {
-    return this.categorias.find(c => c.id === id);
+  buscarPorId(id: number): Observable<Categoria> {
+    return this.http.get<Categoria>(`${this.API}/${id}`);
   }
 
-  cadastrar(dados: CategoriaInput): Categoria {
-    const categoria: Categoria = {
-      ...dados,
-      id: this.proximoId++
-    };
-
-    this.categorias.push(categoria);
-
-    return categoria;
+  cadastrar(dados: CategoriaInput): Observable<Categoria> {
+    return this.http.post<Categoria>(this.API,dados);
   }
 
-  atualizar(id: number, dados: CategoriaInput): Categoria | undefined {
-    const indice = this.categorias.findIndex(c => c.id === id);
-
-    if (indice === -1) {
-      return undefined;
-    }
-
-    const categoriaAtualizada: Categoria = {
-      ...this.categorias[indice],
-      ...dados,
-      id
-    };
-
-    this.categorias[indice] = categoriaAtualizada;
-
-    return categoriaAtualizada;
-  }
-
-  alterarSituacao(id: number): Categoria | undefined {
-    const categoria = this.categorias.find(c => c.id === id);
-
-    if (!categoria) {
-      return undefined;
-    }
-
-    categoria.ativo = !categoria.ativo;
-
-    return categoria;
+  atualizar(id: number, dados: CategoriaInput): Observable<Categoria> {
+    return this.http.put<Categoria>(`${this.API}/${id}`,dados);
   }
 }
